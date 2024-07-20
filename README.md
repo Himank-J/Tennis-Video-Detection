@@ -1,12 +1,16 @@
 # Tennis-Video-Detection
 
-## AIM
+## 🎯 AIM
 
 The aim of the project is to implement a video detection model which is capable of identification of players involved in the match, tennis ball and the keypoints of the tennis court. Once detected, we will also generate a mini map of the court which will showcase player and ball movements. At the end we also calculate player and ball related statistics such as player speed, ball speed etc.
 
 ---
+## 📹 Demo
 
-## Features
+https://github.com/user-attachments/assets/46cf15f6-7cfe-4857-9dca-4cef6970b5eb
+
+--- 
+## ⭐ Features
 
 - Player detecion using YoloV8
 - Tennis Ball detection using custom trained yolo model
@@ -16,7 +20,7 @@ The aim of the project is to implement a video detection model which is capable 
 
 ---
 
-## Requirements
+## 🗒️ Requirements
 
 - Python 3.9 and above
 - Ultralytics
