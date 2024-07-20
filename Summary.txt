@@ -1,0 +1,366 @@
+PlayerTracker Class Overview
+The PlayerTracker class is designed for detecting, tracking, and managing player movements in video frames using a YOLO (You Only Look Once) model. 
+Here's a summary of its functionalities:
+
+Initialization
+__init__(self, model_path): Initializes the PlayerTracker object with a specified YOLO model located at model_path.
+Methods
+detect_frames(self, frames, read_saved_results=False, result_path=None):
+
+Detects players in a series of video frames.
+Parameters:
+frames: List of video frames.
+read_saved_results: Boolean to indicate whether to read previously saved detection results.
+result_path: Path to save or load detection results.
+Returns: List of player detections for each frame.
+detect_frame(self, frame):
+
+Detects players in a single video frame.
+Parameter:
+frame: A single video frame.
+Returns: Dictionary of player detections with player IDs as keys and bounding boxes as values.
+draw_bboxes(self, frames, player_detections):
+
+Draws bounding boxes around detected players in video frames.
+Parameters:
+frames: List of video frames.
+player_detections: List of player detection dictionaries.
+Returns: List of video frames with bounding boxes drawn around detected players.
+choose_and_filter_players(self, court_keypoints, player_detections):
+
+Chooses and filters players based on their proximity to specified court keypoints.
+Parameters:
+court_keypoints: Coordinates of key points on the court.
+player_detections: List of player detection dictionaries.
+Returns: List of filtered player detection dictionaries.
+choose_players(self, court_keypoints, player_detections_first_frame):
+
+Chooses the two players closest to the specified court keypoints.
+Parameters:
+court_keypoints: Coordinates of key points on the court.
+player_detections_first_frame: Player detection dictionary for the first frame.
+Returns: List of IDs of the two chosen players.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+BallTracker Class Overview
+The BallTracker class is designed for detecting, tracking, and managing tennis ball movements in video frames using a YOLO (You Only Look Once) model. Here's a summary of its functionalities:
+
+Initialization
+__init__(self, model_path): Initializes the BallTracker object with a specified YOLO model located at model_path.
+Methods
+interpolate_ball_positions(self, ball_positions):
+
+Interpolates missing ball positions in the detection results to handle frames where the ball is not detected.
+Parameter:
+ball_positions: List of ball position dictionaries.
+Returns: List of ball position dictionaries with interpolated values.
+get_ball_shot_frames(self, ball_positions):
+
+Identifies frames where the ball is hit based on changes in the ball's vertical position.
+Parameter:
+ball_positions: List of ball position dictionaries.
+Returns: List of frame numbers where ball hits are detected.
+detect_frames(self, frames, read_saved_results=False, result_path=None):
+
+Detects ball positions in a series of video frames.
+Parameters:
+frames: List of video frames.
+read_saved_results: Boolean to indicate whether to read previously saved detection results.
+result_path: Path to save or load detection results.
+Returns: List of ball detections for each frame.
+detect_frame(self, frame):
+
+Detects ball positions in a single video frame.
+Parameter:
+frame: A single video frame.
+Returns: Dictionary of ball detections with ball ID as key and bounding box as value.
+draw_bboxes(self, frames, ball_detections):
+
+Draws bounding boxes around detected balls in video frames.
+Parameters:
+frames: List of video frames.
+ball_detections: List of ball detection dictionaries.
+Returns: List of video frames with bounding boxes drawn around detected balls.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CourtLineDetector Class Overview
+The CourtLineDetector class is designed for detecting tennis court lines and keypoints in images or video frames using a pre-trained ResNet-50 model. Here's a summary of its functionalities:
+
+Initialization
+__init__(self, model_path): Initializes the CourtLineDetector object with a ResNet-50 model for detecting court lines and keypoints. The final layer is modified to output 28 values corresponding to 14 keypoints (x, y coordinates).
+Methods
+predict(self, image):
+
+Predicts the keypoints of the tennis court lines in a given image.
+Parameter:
+image: Input image in BGR format.
+Returns: Array of predicted keypoints in the original image dimensions.
+draw_keypoints(self, image, keypoints):
+
+Draws the detected keypoints on the input image.
+Parameters:
+image: Input image.
+keypoints: Array of keypoints to be drawn.
+Returns: Image with keypoints drawn as circles and labeled with their index.
+draw_keypoints_on_video(self, video_frames, keypoints):
+
+Draws the detected keypoints on each frame of the video.
+Parameters:
+video_frames: List of video frames.
+keypoints: Array of keypoints to be drawn on each frame.
+Returns: List of video frames with keypoints drawn.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MiniCourt Class Overview
+The MiniCourt class provides functionalities to create, draw, and interact with a mini representation of a tennis court on video frames. This is particularly useful for visualizing player and ball positions relative to the court. Here's a summary of its functionalities:
+
+Initialization
+__init__(self, frame): Initializes the MiniCourt object and sets up the mini court's parameters and positions based on the given frame.
+Methods
+convert_meters_to_pixels(self, meters):
+
+Converts distances from meters to pixels based on the court's dimensions.
+Parameter:
+meters: Distance in meters.
+Returns: Distance in pixels.
+set_court_drawing_key_points(self):
+
+Sets up key points for drawing the mini court based on the real court's dimensions and positions.
+set_court_lines(self):
+
+Sets up lines to be drawn on the mini court.
+set_mini_court_position(self):
+
+Calculates the position and dimensions of the mini court on the frame.
+set_canvas_background_box_position(self, frame):
+
+Sets the position of the background rectangle that will contain the mini court on the frame.
+Parameter:
+frame: The frame in which the background rectangle position is set.
+draw_court(self, frame):
+
+Draws the mini court with key points and lines on the given frame.
+Parameter:
+frame: The frame on which the court is drawn.
+Returns: The frame with the mini court drawn.
+draw_background_rectangle(self, frame):
+
+Draws a semi-transparent background rectangle for the mini court.
+Parameter:
+frame: The frame on which the background rectangle is drawn.
+Returns: The frame with the background rectangle drawn.
+draw_mini_court(self, frames):
+
+Draws the mini court on a series of frames.
+Parameter:
+frames: List of frames.
+Returns: List of frames with the mini court drawn.
+get_start_point_of_mini_court(self):
+
+Gets the starting point (top-left corner) of the mini court.
+Returns: Tuple (x, y) representing the start point of the mini court.
+get_width_of_mini_court(self):
+
+Gets the width of the mini court.
+Returns: The width of the mini court in pixels.
+get_court_drawing_keypoints(self):
+
+Gets the key points used for drawing the mini court.
+Returns: List of key points.
+get_mini_court_coordinates(self, object_position, closest_key_point, closest_key_point_index, player_height_in_pixels, player_height_in_meters):
+
+Converts an object's position from real court coordinates to mini court coordinates.
+Parameters:
+object_position: Position of the object on the real court.
+closest_key_point: Closest key point on the real court.
+closest_key_point_index: Index of the closest key point.
+player_height_in_pixels: Height of the player in pixels.
+player_height_in_meters: Height of the player in meters.
+Returns: Position of the object on the mini court.
+convert_bounding_boxes_to_mini_court_coordinates(self, player_boxes, ball_boxes, original_court_key_points):
+
+Converts bounding boxes of players and balls from real court coordinates to mini court coordinates.
+Parameters:
+player_boxes: Bounding boxes of players.
+ball_boxes: Bounding boxes of the ball.
+original_court_key_points: Key points of the original court.
+Returns: Converted bounding boxes for players and balls on the mini court.
+draw_points_on_mini_court(self, frames, positions, color=(0,255,0)):
+
+Draws points on the mini court in each frame.
+Parameters:
+frames: List of frames.
+positions: Positions of points to be drawn.
+color: Color of the points (default is green).
+Returns: List of frames with points drawn on the mini court.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+The get_ball_shot_frames function identifies the frames in which a ball is hit during a sequence of video frames. It processes the ball positions frame by frame and uses a rolling mean of the ball's vertical position to detect significant changes, which indicate a ball hit. Here's a detailed explanation of the logic behind this function:
+
+Input
+ball_positions: A list of dictionaries, each containing the bounding box coordinates of the ball for each frame. The dictionary key 1 refers to the ball's bounding box coordinates [x1, y1, x2, y2].
+
+Steps:
+
+Extract Ball Positions:
+The function first extracts the ball positions (if they exist) for each frame and creates a DataFrame df_ball_positions with columns for the ball's coordinates (x1, y1, x2, y2).
+
+Initialize Columns:
+Adds two new columns to df_ball_positions:
+ball_hit: Initialized to 0, indicating whether a ball hit is detected in that frame.
+mid_y: The midpoint of the ball's vertical position, calculated as the average of y1 and y2.
+
+Compute Rolling Mean and Delta:
+Calculates a rolling mean of mid_y over a window of 5 frames. This smooths out short-term fluctuations and helps in detecting significant changes.
+Computes delta_y, which is the difference between consecutive values of the rolling mean. This indicates the rate of change of the ball's vertical position.
+
+Detect Ball Hits:
+Loops through the frames and checks for significant changes in delta_y:
+A ball hit is detected if delta_y changes direction (positive to negative or negative to positive), indicating a sudden change in the ball's vertical movement.
+For each detected change in delta_y:
+Checks if the change persists for a specified number of frames (minimum_change_frames_for_hit), ensuring it's not just a noise.
+
+Identify Hit Frames:
+Extracts the frame numbers where ball_hit is set to 1, indicating a detected ball hit.
+
+-----------------------
+Player Stats:
+
+This block of code calculates various statistics for two players in a tennis match based on the frames where ball shots are detected. Here’s an in-depth explanation of each part:
+
+'''
+player_stats_data = [{
+    'frame_num':0,
+    'player_1_number_of_shots':0,
+    'player_1_total_shot_speed':0,
+    'player_1_last_shot_speed':0,
+    'player_1_total_player_speed':0,
+    'player_1_last_player_speed':0,
+    'player_2_number_of_shots':0,
+    'player_2_total_shot_speed':0,
+    'player_2_last_shot_speed':0,
+    'player_2_total_player_speed':0,
+    'player_2_last_player_speed':0,
+}]
+'''
+Initial Player Stats Data:
+A list player_stats_data is initialized with a dictionary that holds the initial values of various statistics for the players. This includes the number of shots, total shot speed, last shot speed, total player speed, and last player speed for both players.
+
+'''
+for ball_shot_ind in range(len(ball_shot_frames)-1):
+    start_frame = ball_shot_frames[ball_shot_ind]
+    end_frame = ball_shot_frames[ball_shot_ind+1]
+    ball_shot_time_in_seconds = (end_frame-start_frame)/24 # 24fps
+
+'''
+Loop through the Detected Ball Shot Frames:
+The function iterates through pairs of ball shot frames to calculate the necessary statistics.
+
+'''
+distance_covered_by_ball_pixels = measure_distance(ball_mini_court_detections[start_frame][1],ball_mini_court_detections[end_frame][1])
+distance_covered_by_ball_meters = convert_pixel_distance_to_meters(distance_covered_by_ball_pixels,constants.DOUBLE_LINE_WIDTH,minicourt.get_width_of_mini_court()) 
+speed_of_ball_shot = distance_covered_by_ball_meters/ball_shot_time_in_seconds * 3.6
+'''
+Calculate Ball Shot Speed:
+Measures the distance covered by the ball between the start_frame and end_frame in pixels.
+Converts this distance from pixels to meters.
+Calculates the speed of the ball shot in km/h.
+
+'''
+player_positions = player_mini_court_detections[start_frame]
+player_shot_ball = min(player_positions.keys(), key=lambda player_id: measure_distance(player_positions[player_id], ball_mini_court_detections[start_frame][1]))
+'''
+Identify Player Who Hit the Ball:
+Finds the player closest to the ball at the start_frame, indicating who hit the ball.
+
+'''
+opponent_player_id = 1 if player_shot_ball == 2 else 2
+distance_covered_by_opponent_pixels = measure_distance(player_mini_court_detections[start_frame][opponent_player_id],player_mini_court_detections[end_frame][opponent_player_id])
+distance_covered_by_opponent_meters = convert_pixel_distance_to_meters(distance_covered_by_opponent_pixels,constants.DOUBLE_LINE_WIDTH,minicourt.get_width_of_mini_court()) 
+speed_of_opponent = distance_covered_by_opponent_meters/ball_shot_time_in_seconds * 3.6
+'''
+Calculate Opponent Player Speed:
+Identifies the opponent player.
+Measures the distance covered by the opponent player between the start_frame and end_frame in pixels.
+Converts this distance from pixels to meters.
+Calculates the speed of the opponent player in km/h.
+
+'''
+current_player_stats= deepcopy(player_stats_data[-1])
+current_player_stats['frame_num'] = start_frame
+current_player_stats[f'player_{player_shot_ball}_number_of_shots'] += 1
+current_player_stats[f'player_{player_shot_ball}_total_shot_speed'] += speed_of_ball_shot
+current_player_stats[f'player_{player_shot_ball}_last_shot_speed'] = speed_of_ball_shot
+current_player_stats[f'player_{opponent_player_id}_total_player_speed'] += speed_of_opponent
+current_player_stats[f'player_{opponent_player_id}_last_player_speed'] = speed_of_opponent
+
+player_stats_data.append(current_player_stats)
+'''
+Update Player Stats:
+Copies the last stats entry to update with the current frame's data.
+Updates the number of shots, total shot speed, last shot speed, total player speed, and last player speed for the player who hit the ball.
+Updates the total player speed and last player speed for the opponent player.
+Appends the updated stats to the player_stats_data list.
+
+'''
+player_stats_data_df = pd.DataFrame(player_stats_data)
+frames_df = pd.DataFrame({'frame_num': list(range(len(video_frames)))})
+player_stats_data_df = pd.merge(frames_df, player_stats_data_df, on='frame_num', how='left')
+player_stats_data_df = player_stats_data_df.ffill()
+
+player_stats_data_df['player_1_average_shot_speed'] = player_stats_data_df['player_1_total_shot_speed']/player_stats_data_df['player_1_number_of_shots']
+player_stats_data_df['player_2_average_shot_speed'] = player_stats_data_df['player_2_total_shot_speed']/player_stats_data_df['player_2_number_of_shots']
+player_stats_data_df['player_1_average_player_speed'] = player_stats_data_df['player_1_total_player_speed']/player_stats_data_df['player_2_number_of_shots']
+player_stats_data_df['player_2_average_player_speed'] = player_stats_data_df['player_2_total_player_speed']/player_stats_data_df['player_1_number_of_shots']
+'''
+Create DataFrame:
+Converts player_stats_data to a DataFrame player_stats_data_df.
+Creates a DataFrame frames_df with a range of frame numbers corresponding to the length of the video frames.
+Merges player_stats_data_df with frames_df on the frame_num column, filling forward any missing values.
+Calculates average shot speed and average player speed for both players.
+
+---------------------------------
+
+Calculation of Ball Speed
+Time Calculation:
+
+The time taken for the ball to travel from one shot frame to the next is calculated. This is done by taking the difference between the two frame indices and dividing by the frame rate (24 frames per second).
+Distance Calculation:
+
+The distance covered by the ball between the start and end frames is measured in pixels.
+This pixel distance is converted to meters using a conversion factor that relates pixel distance to real-world distance (based on court dimensions).
+Speed Calculation:
+
+The speed of the ball is then calculated by dividing the distance (in meters) by the time (in seconds) and converting the result to km/h by multiplying by 3.6.
+Calculation of Player Speeds
+Player Who Hit the Ball:
+
+The player who hit the ball is identified as the one closest to the ball's position at the start frame.
+Opponent Player:
+
+The opponent player is the other player on the court.
+Distance Covered by Opponent:
+
+The distance covered by the opponent player between the start and end frames is measured in pixels.
+This pixel distance is converted to meters using the same conversion factor as used for the ball.
+Speed of Opponent:
+
+The speed of the opponent player is calculated by dividing the distance (in meters) by the time (in seconds) and converting the result to km/h by multiplying by 3.6.
+Average Speeds Calculation
+Average Shot Speed for Players:
+
+For each player, the total shot speed is the sum of all the shot speeds recorded for that player.
+The number of shots is the total number of shots taken by that player.
+The average shot speed is calculated by dividing the total shot speed by the number of shots.
+Average Player Speed:
+
+For each player, the total player speed is the sum of all the player speeds recorded for that player during the intervals when they were moving.
+The average player speed is calculated by dividing the total player speed by the number of shots taken by the opponent (since player speed is recorded for the intervals when the opponent hits the ball).
+Summary of Logic
+Ball Speed: Calculated from the distance covered by the ball and the time taken between frames where the ball is hit.
+Player Speeds: Calculated from the distance covered by the players (especially the opponent) and the time taken between the frames.
+Average Speeds: Derived by summing the respective speeds over the relevant intervals and dividing by the number of those intervals (shots for average shot speed, opponent shots for average player speed).
