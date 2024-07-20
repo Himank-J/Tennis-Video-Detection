@@ -140,3 +140,11 @@ The BallTracker class is designed for detecting, tracking, and managing tennis b
   - Opponent Player Statistics: Measures and calculates the opponent player's speed.
   - Update Player Stats: Updates the player statistics with the current frame's data.
   - Create Final DataFrame: Compiles all statistics into a DataFrame and calculates average speeds.
+ 
+---
+## 📰 References
+
+- https://github.com/yastrebksv/TennisCourtDetector
+- https://blog.ml6.eu/improving-tennis-court-line-detection-with-machine-learning-90f82dccdf1d
+- https://medium.com/@kosolapov.aetp/tennis-analysis-using-deep-learning-and-machine-learning-a5a74db7e2ee
+- https://stackoverflow.com/questions/49236489/how-to-calculate-camera-movement-speed-between-to-frames#:~:text=If%20you%20want%20to%20compute,or%20frame%2Dtime)%20estimate.
